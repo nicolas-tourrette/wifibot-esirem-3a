@@ -7,7 +7,7 @@ class MainWindow : public QWidget {
     Q_OBJECT
 
     public:
-        MainWindow();
+        MainWindow(QString ip, int port) ;
 
     private:
 };

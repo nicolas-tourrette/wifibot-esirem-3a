@@ -1,5 +1,5 @@
 #include "mainwindow.h"
 
-MainWindow::MainWindow() : QWidget() {
+MainWindow::MainWindow(QString ip, int port) : QWidget() {
 
 }
