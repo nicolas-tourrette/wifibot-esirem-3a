@@ -3,7 +3,7 @@
 
 Connexion::Connexion() : QWidget() {
     this->setWindowTitle("Wifibot Pilot | Connexion") ;
-    //this->setWindowIcon("") ;
+    this->setWindowIcon(QIcon("")) ;
     QGridLayout *grille = new QGridLayout() ;
     grille->setMargin(20) ;
 
@@ -46,22 +46,39 @@ void Connexion::boutonValiderClic(){
     ipAddress = champIpAddress->text() ;
     numPort = champNumPort->text().toInt() ;
     information->setWindowTitle("Wifibot Pilot | Information") ;
-    information->setMinimumWidth(300) ;
     if(ipAddress.isEmpty() && numPort == 0){
         information->setText("IP address and port number are empty! Please give values.") ;
+        information->setIcon(QMessageBox::Warning) ;
+        information->exec() ;
     }
     else if(ipAddress.isEmpty() || numPort == 0){
         information->setText("Some informations missing! Please give values.") ;
+        information->setIcon(QMessageBox::Warning) ;
+        information->exec() ;
     }
     else{
         information->setText("Trying to reach " + ipAddress + ":" + champNumPort->text() + "... Please wait.") ;
+        information->setIcon(QMessageBox::Information) ;
+        information->exec() ;
         /*
          *
          * Ici devra être insérer le code qui établit la connexion avec le Wifibot...
          *
          */
+        if(true){
+            information->setText("Connexion established with " + ipAddress + ":" + champNumPort->text() + "!") ;
+            information->setIcon(QMessageBox::Information) ;
+            information->exec() ;
+            MainWindow *fenetrePrincipale = new MainWindow(ipAddress, numPort);
+            fenetrePrincipale->show() ;
+            this->close() ;
+        }
+        else{
+            information->setText("Fail to reach " + ipAddress + ":" + champNumPort->text() + "! Please check network.") ;
+            information->setIcon(QMessageBox::Critical) ;
+            information->exec() ;
+        }
     }
-    information->show() ;
 }
 
 void Connexion::boutonResetClic(){
@@ -70,6 +87,6 @@ void Connexion::boutonResetClic(){
     champNumPort->setText("") ;
     information->setWindowTitle("Wifibot Pilot | Information") ;
     information->setText("IP address and port number have been reset!") ;
-    information->setMinimumWidth(300) ;
+    information->setIcon(QMessageBox::Information) ;
     information->show() ;
 }
