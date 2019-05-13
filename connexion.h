@@ -7,6 +7,7 @@
 #include <QPushButton>
 #include <QGridLayout>
 #include <QMessageBox>
+#include <QKeyEvent>
 #include <QDebug>
 
 namespace Ui {
@@ -17,18 +18,19 @@ class Connexion : public QWidget {
     Q_OBJECT
 
     public:
-        Connexion();
+        Connexion() ;
+        void keyPressEvent(QKeyEvent *event) ;
 
     private:
         QString ipAddress ;
         int numPort ;
         QLabel *ipAddressLabel, *numPortLabel ;
-        QLineEdit *champIpAddress, *champNumPort ;
-        QPushButton *boutonValider, *boutonAnnuler, *boutonReset ;
+        QLineEdit *ipAddressField, *numPortField ;
+        QPushButton *okButton, *cancelButton, *resetButton ;
 
     public slots:
-        void boutonValiderClic() ;
-        void boutonResetClic() ;
+        void okButtonClic() ;
+        void resetButtonClic() ;
 };
 
 #endif // CONNEXION_H

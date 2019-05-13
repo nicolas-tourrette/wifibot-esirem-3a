@@ -7,6 +7,7 @@
 #include <QPushButton>
 #include <QGridLayout>
 #include <QMessageBox>
+#include <QGroupBox>
 #include <QDebug>
 
 class MainWindow : public QWidget {
@@ -17,6 +18,9 @@ class MainWindow : public QWidget {
 
     private:
         QString ipAddress, numPort ;
+        QLabel *statusLabel, *ipAddressLabel, *numPortLabel ;
+        QGroupBox *pilotBox, *sensorsBox, *cameraBox ;
+        QPushButton *upButton, *downButton, *leftButton, *rightButton ;
 
     public slots:
         void disconnect() ;

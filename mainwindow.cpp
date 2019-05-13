@@ -7,23 +7,61 @@ MainWindow::MainWindow(QString ip, int port) : QWidget() {
     this->setWindowTitle("Wifibot Pilot | Robot " + ip + ":" + QString::number(port)) ;
     this->setWindowIcon(QIcon("")) ;
     QGridLayout *grille = new QGridLayout() ;
+    QGridLayout *innerPilotPanelGrid = new QGridLayout() ;
+    QGridLayout *innerSensorsPanelGrid = new QGridLayout() ;
+    QGridLayout *innerCameraPanelGrid = new QGridLayout() ;
     grille->setHorizontalSpacing(60) ;
 
-    QLabel *status = new QLabel("CONNECTED", this) ;
-    status->setStyleSheet("color: #01DF01") ;
-    status->setFont(QFont("System", 10, QFont::Bold)) ;
-    grille->addWidget(status, 0, 0) ;
+    statusLabel = new QLabel("CONNECTED", this) ;
+    statusLabel->setStyleSheet("color: #01DF01") ;
+    statusLabel->setFont(QFont("System", 10, QFont::Bold)) ;
+    grille->addWidget(statusLabel, 0, 0) ;
 
-    QLabel *ipAddressLabel = new QLabel("IP address : " + ip, this) ;
-    QLabel *numPortLabel = new QLabel("Port number : " + QString::number(port), this) ;
+    ipAddressLabel = new QLabel("IP address : " + ip, this) ;
+    numPortLabel = new QLabel("Port number : " + QString::number(port), this) ;
     grille->addWidget(ipAddressLabel, 0, 1) ;
     grille->addWidget(numPortLabel, 0, 2) ;
 
-    QPushButton *disconnectButton = new QPushButton("Disconnect") ;
-    disconnectButton->setIcon(QIcon("")) ;
+    QPushButton *disconnectButton = new QPushButton(" Disconnect") ;
+    disconnectButton->setIcon(QIcon("../icons/baseline-wifi_off-24px.svg")) ;
     grille->addWidget(disconnectButton, 0, 3) ;
 
+    pilotBox = new QGroupBox("Pilot Panel") ;
+    sensorsBox = new QGroupBox("Sensors Control Panel") ;
+    cameraBox = new QGroupBox("Camera view") ;
+    grille->addWidget(pilotBox, 1, 0, 1, 2) ;
+    grille->addWidget(sensorsBox, 1, 2, 1, 2) ;
+    grille->addWidget(cameraBox, 2, 0, 1, 4) ;
+
+    upButton = new QPushButton("") ;
+    upButton->setIcon(QIcon("../icons/baseline-expand_less-24px.svg")) ;
+    upButton->setIconSize(QSize(30, 30)) ;
+    upButton->setToolTip("Go ahead!") ;
+    innerPilotPanelGrid->addWidget(upButton, 0, 0, 1, 2) ;
+
+    downButton = new QPushButton("") ;
+    downButton->setIcon(QIcon("../icons/baseline-expand_more-24px.svg")) ;
+    downButton->setIconSize(QSize(30, 30)) ;
+    downButton->setToolTip("Go back!") ;
+    innerPilotPanelGrid->addWidget(downButton, 2, 0, 1, 2) ;
+
+    leftButton = new QPushButton("") ;
+    leftButton->setIcon(QIcon("../icons/baseline-chevron_left-24px.svg")) ;
+    leftButton->setIconSize(QSize(30, 30)) ;
+    leftButton->setToolTip("Go left!") ;
+    innerPilotPanelGrid->addWidget(leftButton, 1, 0) ;
+
+    rightButton = new QPushButton("") ;
+    rightButton->setIcon(QIcon("../icons/baseline-chevron_right-24px.svg")) ;
+    rightButton->setIconSize(QSize(30, 30)) ;
+    rightButton->setToolTip("Go right!") ;
+    innerPilotPanelGrid->addWidget(rightButton, 1, 1) ;
+
     this->setLayout(grille) ;
+    this->layout()->setSizeConstraint(QLayout::SetFixedSize) ;
+    pilotBox->setLayout(innerPilotPanelGrid) ;
+    sensorsBox->setLayout(innerSensorsPanelGrid) ;
+    cameraBox->setLayout(innerCameraPanelGrid) ;
 
     QObject::connect(disconnectButton, SIGNAL(clicked()), this, SLOT(disconnect())) ;
 }

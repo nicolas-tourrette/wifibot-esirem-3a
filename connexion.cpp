@@ -14,37 +14,39 @@ Connexion::Connexion() : QWidget() {
 
     ipAddressLabel = new QLabel("Robot IPv4 address : ", this) ;
     grille->addWidget(ipAddressLabel, 1, 0) ;
-    champIpAddress = new QLineEdit(this) ;
-    //champIpAddress->setFixedWidth(400) ;
-    grille->addWidget(champIpAddress, 1, 1) ;
+    ipAddressField = new QLineEdit(this) ;
+    //ipAddressField->setFixedWidth(400) ;
+    grille->addWidget(ipAddressField, 1, 1) ;
 
     numPortLabel = new QLabel("Port number to reach : ", this) ;
     grille->addWidget(numPortLabel, 2, 0) ;
-    champNumPort = new QLineEdit(this) ;
-    grille->addWidget(champNumPort, 2, 1) ;
+    numPortField = new QLineEdit(this) ;
+    grille->addWidget(numPortField, 2, 1) ;
 
-    boutonValider = new QPushButton("OK", this) ;
-    boutonValider->setIcon(QIcon("../icons/baseline-check_circle-24px.svg")) ;
-    boutonAnnuler = new QPushButton("Cancel", this) ;
-    boutonAnnuler->setIcon(QIcon("../icons/baseline-cancel-24px.svg")) ;
-    boutonReset = new QPushButton("Reset", this) ;
-    boutonReset->setIcon(QIcon("../icons/baseline-delete-24px.svg")) ;
-    grille->addWidget(boutonValider, 0, 2) ;
-    grille->addWidget(boutonAnnuler, 1, 2) ;
-    grille->addWidget(boutonReset, 2, 2) ;
+    okButton = new QPushButton(" OK", this) ;
+    okButton->setIcon(QIcon("../icons/baseline-check_circle-24px.svg")) ;
+    okButton->setToolTip("Press ENTER key.") ;
+    cancelButton = new QPushButton(" Cancel", this) ;
+    cancelButton->setIcon(QIcon("../icons/baseline-cancel-24px.svg")) ;
+    cancelButton->setToolTip("Press ESCAPE key.") ;
+    resetButton = new QPushButton(" Reset", this) ;
+    resetButton->setIcon(QIcon("../icons/baseline-delete-24px.svg")) ;
+    grille->addWidget(okButton, 0, 2) ;
+    grille->addWidget(cancelButton, 1, 2) ;
+    grille->addWidget(resetButton, 2, 2) ;
 
     this->setLayout(grille) ;
     this->layout()->setSizeConstraint(QLayout::SetFixedSize) ;
 
-    QObject::connect(boutonValider, SIGNAL(clicked()), this, SLOT(boutonValiderClic())) ;
-    QObject::connect(boutonAnnuler, SIGNAL(clicked()), this, SLOT(close())) ;
-    QObject::connect(boutonReset, SIGNAL(clicked()), this, SLOT(boutonResetClic())) ;
+    QObject::connect(okButton, SIGNAL(clicked()), this, SLOT(okButtonClic())) ;
+    QObject::connect(cancelButton, SIGNAL(clicked()), this, SLOT(close())) ;
+    QObject::connect(resetButton, SIGNAL(clicked()), this, SLOT(resetButtonClic())) ;
 }
 
-void Connexion::boutonValiderClic(){
+void Connexion::okButtonClic(){
     QMessageBox *information = new QMessageBox();
-    ipAddress = champIpAddress->text() ;
-    numPort = champNumPort->text().toInt() ;
+    ipAddress = ipAddressField->text() ;
+    numPort = numPortField->text().toInt() ;
     information->setWindowTitle("Wifibot Pilot | Information") ;
     if(ipAddress.isEmpty() && numPort == 0){
         information->setText("IP address and port number are empty! Please give values.") ;
@@ -57,16 +59,16 @@ void Connexion::boutonValiderClic(){
         information->exec() ;
     }
     else{
-        information->setText("Trying to reach " + ipAddress + ":" + champNumPort->text() + "... Please wait.") ;
+        information->setText("Trying to reach " + ipAddress + ":" + numPortField->text() + "... Please wait.") ;
         information->setIcon(QMessageBox::Information) ;
         information->exec() ;
         /*
          *
-         * Ici devra être insérer le code qui établit la connexion avec le Wifibot...
+         * Ici devra être inséré le code qui établit la connexion avec le Wifibot...
          *
          */
         if(true){
-            information->setText("Connexion established with " + ipAddress + ":" + champNumPort->text() + "!") ;
+            information->setText("Connexion established with " + ipAddress + ":" + numPortField->text() + "!") ;
             information->setIcon(QMessageBox::Information) ;
             information->exec() ;
             MainWindow *fenetrePrincipale = new MainWindow(ipAddress, numPort);
@@ -74,19 +76,30 @@ void Connexion::boutonValiderClic(){
             this->close() ;
         }
         else{
-            information->setText("Fail to reach " + ipAddress + ":" + champNumPort->text() + "! Please check network.") ;
+            information->setText("Fail to reach " + ipAddress + ":" + numPortField->text() + "! Please check network.") ;
             information->setIcon(QMessageBox::Critical) ;
             information->exec() ;
         }
     }
 }
 
-void Connexion::boutonResetClic(){
+void Connexion::resetButtonClic(){
     QMessageBox *information = new QMessageBox();
-    champIpAddress->setText("") ;
-    champNumPort->setText("") ;
+    ipAddressField->setText("") ;
+    numPortField->setText("") ;
     information->setWindowTitle("Wifibot Pilot | Information") ;
     information->setText("IP address and port number have been reset!") ;
     information->setIcon(QMessageBox::Information) ;
     information->show() ;
+}
+
+void Connexion::keyPressEvent(QKeyEvent *event){
+    switch (event->key()) {
+        case Qt::Key_Enter :
+            okButtonClic() ;
+            break ;
+        case Qt::Key_Escape :
+            this->close() ;
+            break ;
+    }
 }
