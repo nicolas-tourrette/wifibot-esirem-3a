@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QMainWindow>
 #include <QWidget>
 #include <QLabel>
 #include <QLineEdit>
@@ -8,15 +9,21 @@
 #include <QGridLayout>
 #include <QMessageBox>
 #include <QGroupBox>
+#include <QMenuBar>
+#include <QMenu>
+#include <QAction>
+#include <QStatusBar>
 #include <QDebug>
 
-class MainWindow : public QWidget {
+class MainWindow : public QMainWindow {
     Q_OBJECT
 
     public:
         MainWindow(QString ip, int port) ;
 
     private:
+        void showHelp() ;
+        void showAbout() ;
         QString ipAddress, numPort ;
         QLabel *statusLabel, *ipAddressLabel, *numPortLabel ;
         QGroupBox *pilotBox, *sensorsBox, *cameraBox ;

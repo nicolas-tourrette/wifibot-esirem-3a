@@ -3,7 +3,7 @@
 
 Connexion::Connexion() : QWidget() {
     this->setWindowTitle("Wifibot Pilot | Connexion") ;
-    this->setWindowIcon(QIcon("")) ;
+    this->setWindowIcon(QIcon("../icons/baseline-android-24px.svg")) ;
     QGridLayout *grille = new QGridLayout() ;
     grille->setMargin(20) ;
 

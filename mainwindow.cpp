@@ -1,11 +1,31 @@
 #include "mainwindow.h"
 
-MainWindow::MainWindow(QString ip, int port) : QWidget() {
+MainWindow::MainWindow(QString ip, int port) : QMainWindow() {
     ipAddress = ip ;
     numPort = QString::number(port) ;
 
+    QWidget *centralWidget = new QWidget() ;
+    setCentralWidget(centralWidget) ;
+
     this->setWindowTitle("Wifibot Pilot | Robot " + ip + ":" + QString::number(port)) ;
-    this->setWindowIcon(QIcon("")) ;
+    this->setWindowIcon(QIcon("../icons/baseline-android-24px.svg")) ;
+
+    statusBar()->showMessage("Ready") ;
+
+    QMenu *menuFichier = menuBar()->addMenu("File") ;
+    QMenu *menuAbout = menuBar()->addMenu("Help") ;
+
+    QAction *disconnectRobot = new QAction(QIcon("../icons/baseline-wifi_off-24px.svg"), "Disconnect", menuFichier) ;
+    connect(disconnectRobot, &QAction::triggered, this, &MainWindow::disconnect) ;
+    menuFichier->addAction(disconnectRobot) ;
+
+    QAction *help = new QAction(QIcon("../icons/baseline-help-24px.svg"), "Help", menuAbout) ;
+    connect(help, &QAction::triggered, this, &MainWindow::showHelp) ;
+    menuAbout->addAction(help) ;
+    QAction *about = new QAction(QIcon("../icons/baseline-info-24px.svg"), "About Wifibot Pilot", menuAbout) ;
+    connect(about, &QAction::triggered, this, &MainWindow::showAbout) ;
+    menuAbout->addAction(about) ;
+
     QGridLayout *grille = new QGridLayout() ;
     QGridLayout *innerPilotPanelGrid = new QGridLayout() ;
     QGridLayout *innerSensorsPanelGrid = new QGridLayout() ;
@@ -57,7 +77,7 @@ MainWindow::MainWindow(QString ip, int port) : QWidget() {
     rightButton->setToolTip("Go right!") ;
     innerPilotPanelGrid->addWidget(rightButton, 1, 1) ;
 
-    this->setLayout(grille) ;
+    centralWidget->setLayout(grille) ;
     this->layout()->setSizeConstraint(QLayout::SetFixedSize) ;
     pilotBox->setLayout(innerPilotPanelGrid) ;
     sensorsBox->setLayout(innerSensorsPanelGrid) ;
@@ -67,11 +87,11 @@ MainWindow::MainWindow(QString ip, int port) : QWidget() {
 }
 
 void MainWindow::disconnect(){
+    statusBar()->showMessage("Disconnection...") ;
     QMessageBox *information = new QMessageBox();
-    information->setText("Disconnection asked!") ;
-    information->setInformativeText("Do you really want to disconnect from " + this->ipAddress + ":" + this->numPort + "?") ;
     information->setWindowTitle("Wifibot Pilot | Disconnection") ;
-    information->setMinimumWidth(300) ;
+    information->setText(tr("<h2>Disconnection asked!</h2>")) ;
+    information->setInformativeText("<p>Do you really want to disconnect from " + this->ipAddress + ":" + this->numPort + "?</p>") ;
     information->setIcon(QMessageBox::Question) ;
     information->setStandardButtons(QMessageBox::Yes | QMessageBox::No);
     information->setDefaultButton(QMessageBox::No);
@@ -81,6 +101,20 @@ void MainWindow::disconnect(){
             this->close() ;
             break ;
         case QMessageBox::No :
+            statusBar()->showMessage("Ready") ;
             break ;
     }
+}
+
+void MainWindow::showHelp(){
+
+}
+
+void MainWindow::showAbout(){
+    QMessageBox *information = new QMessageBox();
+    information->setWindowTitle("Wifibot Pilot | About") ;
+    information->setText(tr("<h2>About this software</h2>")) ;
+    information->setInformativeText(tr("<p>This software has been developped by Anindo MOUSSARD and Nicolas TOURRETTE, studying IE ingineering at ESIREM Dijon.</p><p>Version : 1.0 build 1</p><p>GUI : Nicolas TOURRETTE<br>TCP/IP layer : Anindo MOUSSARD</p>")) ;
+    information->setIcon(QMessageBox::Information) ;
+    information->exec() ;
 }
