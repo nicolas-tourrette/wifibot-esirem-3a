@@ -28,7 +28,7 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-        myrobot.cpp
+        myrobot.cpp \
         connexion.cpp
 
 HEADERS += \
