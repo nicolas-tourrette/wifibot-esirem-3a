@@ -1,14 +1,15 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2019-05-09T15:07:00
+# Project created by QtCreator 2019-05-22T17:06:44
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui \
+            network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = Wifibot
+TARGET = Wifiboots
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use
@@ -25,13 +26,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
-        connexion.cpp \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+        myrobot.cpp
+        connexion.cpp
 
 HEADERS += \
-        connexion.h \
-        mainwindow.h
+        mainwindow.h \
+        myrobot.h
 
 FORMS += \
         mainwindow.ui
