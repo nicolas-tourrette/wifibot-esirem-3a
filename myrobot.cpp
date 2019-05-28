@@ -74,3 +74,32 @@ void MyRobot::MyTimerSlot() {
     Mutex.unlock();
 }
 
+void MyRobot::Avancer(){
+
+    qDebug() << "The robot is moving ?!"
+    DataToSend[0] = 0xFF;
+    DataToSend[1] = 0x07;
+    DataToSend[2] = 0x78;
+    DataToSend[3] = 0x0;
+    DataToSend[4] = 0x78;
+    DataToSend[5] = 0x0;
+    DataToSend[6] = 0x0;
+    DataToSend[7] = Crc16(&DataToSend,1);
+    DataToSend[8] = Crc16(&DataToSend,1) >> 8;
+}
+
+unsigned short MyRobot::Crc16(QByteArray byteArray, int pos){
+    unsigned char *data = (unsigned char* )byteArray.constData();
+    unsigned short crc = 0xFFFF;
+    unsigned short Polynome = 0xA001;
+    unsigned short Parity = 0;
+    for(; pos < byteArray.length(); pos++){
+        crc ^= *(data+pos);
+        for (unsigned int CptBit = 0; CptBit <= 7 ; CptBit++){
+            Parity= crc;
+            crc >>= 1;
+            if (Parity%2 == true) crc ^= Polynome;
+        }
+    }
+    return crc;
+}

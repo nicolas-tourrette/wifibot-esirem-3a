@@ -27,6 +27,8 @@ public slots:
     void bytesWritten(qint64 bytes);
     void readyRead();
     void MyTimerSlot();
+    void Avancer();
+    unsigned short Crc16(QByteArray byteArray, int pos);
 
 private:
     QTcpSocket *socket;
