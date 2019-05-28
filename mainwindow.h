@@ -15,6 +15,8 @@
 #include <QStatusBar>
 #include <QDebug>
 
+#include "myrobot.h"
+
 class MainWindow : public QMainWindow {
     Q_OBJECT
 
@@ -24,6 +26,7 @@ class MainWindow : public QMainWindow {
     private:
         void showHelp() ;
         void showAbout() ;
+        MyRobot monRobot;
         QString ipAddress, numPort ;
         QLabel *statusLabel, *ipAddressLabel, *numPortLabel ;
         QGroupBox *pilotBox, *sensorsBox, *cameraBox ;

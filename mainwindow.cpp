@@ -98,6 +98,7 @@ void MainWindow::disconnect(){
     int action = information->exec() ;
     switch (action) {
         case QMessageBox::Yes :
+            monRobot.disConnect();
             this->close() ;
             break ;
         case QMessageBox::No :
