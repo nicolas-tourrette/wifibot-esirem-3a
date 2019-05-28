@@ -1,5 +1,6 @@
 #include "connexion.h"
 #include "mainwindow.h"
+#include "myrobot.h"
 
 Connexion::Connexion() : QWidget() {
     this->setWindowTitle("Wifibot Pilot | Connexion") ;
@@ -44,6 +45,7 @@ Connexion::Connexion() : QWidget() {
 }
 
 void Connexion::okButtonClic(){
+    MyRobot monRobot;
     QMessageBox *information = new QMessageBox();
     ipAddress = ipAddressField->text() ;
     numPort = numPortField->text().toInt() ;
@@ -67,7 +69,7 @@ void Connexion::okButtonClic(){
          * Ici devra être inséré le code qui établit la connexion avec le Wifibot...
          *
          */
-        if(true){
+        if(monRobot.doConnect(ipAddress, numPortField->text())){
             information->setText("Connexion established with " + ipAddress + ":" + numPortField->text() + "!") ;
             information->setIcon(QMessageBox::Information) ;
             information->exec() ;
@@ -76,9 +78,7 @@ void Connexion::okButtonClic(){
             this->close() ;
         }
         else{
-            information->setText("Fail to reach " + ipAddress + ":" + numPortField->text() + "! Please check network.") ;
-            information->setIcon(QMessageBox::Critical) ;
-            information->exec() ;
+
         }
     }
 }

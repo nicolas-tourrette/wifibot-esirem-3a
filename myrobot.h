@@ -1,6 +1,7 @@
 #ifndef MYROBOT_H
 #define MYROBOT_H
 
+#include <QMessageBox>
 #include <QObject>
 #include <QTcpSocket>
 #include <QAbstractSocket>
@@ -12,7 +13,7 @@ class MyRobot : public QObject {
     Q_OBJECT
 public:
     explicit MyRobot(QObject *parent = 0); //anciennement MyTcpClient
-    void doConnect();
+    bool doConnect(QString ip, QString port);
     void disConnect();
     QByteArray DataToSend;
     QByteArray DataReceived;

@@ -20,7 +20,7 @@ MyRobot::MyRobot(QObject *parent) : QObject(parent) {
 }
 
 
-void MyRobot::doConnect() {
+bool MyRobot::doConnect(QString ip, QString port) {
     socket = new QTcpSocket(this); // socket creation
     connect(socket, SIGNAL(connected()),this, SLOT(connected()));
     connect(socket, SIGNAL(disconnected()),this, SLOT(disconnected()));
@@ -28,14 +28,19 @@ void MyRobot::doConnect() {
     connect(socket, SIGNAL(readyRead()),this, SLOT(readyRead()));
     qDebug() << "connecting..."; // this is not blocking call
     //socket->connectToHost("LOCALHOST", 15020);
-    socket->connectToHost("192.168.1.106", 15020); // connection to wifibot
+    //socket->connectToHost("192.168.1.106", 15020); // connection to wifibot
+    socket->connectToHost(ip, port.toInt());
     // we need to wait...
     if(!socket->waitForConnected(5000)) {
         qDebug() << "Error: " << socket->errorString();
-        return;
+        QMessageBox *information = new QMessageBox();
+        information->setText("Fail to reach " + ip + ":" + port + "! Error message: \"" + socket->errorString() + "\".") ;
+        information->setIcon(QMessageBox::Critical) ;
+        information->exec() ;
+        return false;
     }
     TimerEnvoi->start(75);
-
+    return true;
 }
 
 void MyRobot::disConnect() {
