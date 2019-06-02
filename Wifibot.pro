@@ -34,7 +34,8 @@ SOURCES += \
 HEADERS += \
         mainwindow.h \
         myrobot.h \
-        connexion.h
+        connexion.h \
+        commandes.h
 
 FORMS += \
         mainwindow.ui

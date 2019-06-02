@@ -14,7 +14,6 @@
 #include <QAction>
 #include <QStatusBar>
 #include <QDebug>
-#include <QWebFrame>
 
 #include "myrobot.h"
 

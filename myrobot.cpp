@@ -76,7 +76,7 @@ void MyRobot::MyTimerSlot() {
 
 void MyRobot::Avancer(){
 
-    qDebug() << "The robot is moving ?!"
+    qDebug() << "The robot is moving ?!";
     DataToSend[0] = 0xFF;
     DataToSend[1] = 0x07;
     DataToSend[2] = 0x78;
@@ -88,12 +88,12 @@ void MyRobot::Avancer(){
     DataToSend[8] = Crc16(&DataToSend,1) >> 8;
 }
 
-unsigned short MyRobot::Crc16(QByteArray byteArray, int pos){
-    unsigned char *data = (unsigned char* )byteArray.constData();
+unsigned short MyRobot::Crc16(QByteArray *byteArray, int pos){
+    unsigned char *data = (unsigned char*)byteArray->constData();
     unsigned short crc = 0xFFFF;
     unsigned short Polynome = 0xA001;
     unsigned short Parity = 0;
-    for(; pos < byteArray.length(); pos++){
+    for(; pos < byteArray->length(); pos++){
         crc ^= *(data+pos);
         for (unsigned int CptBit = 0; CptBit <= 7 ; CptBit++){
             Parity= crc;
