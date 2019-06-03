@@ -84,6 +84,7 @@ MainWindow::MainWindow(QString ip, int port) : QMainWindow() {
     cameraBox->setLayout(innerCameraPanelGrid) ;
 
     QObject::connect(disconnectButton, SIGNAL(clicked()), this, SLOT(disconnect())) ;
+    QObject::connect(upButton, SIGNAL(pressed()), this, SLOT(avancer())) ;
 }
 
 void MainWindow::disconnect(){
@@ -118,4 +119,9 @@ void MainWindow::showAbout(){
     information->setInformativeText(tr("<p>This software has been developped by Anindo MOUSSARD and Nicolas TOURRETTE, studying IE ingineering at ESIREM Dijon.</p><p>Version : 1.0 build 1</p><p>GUI : Nicolas TOURRETTE<br>TCP/IP layer : Anindo MOUSSARD</p>")) ;
     information->setIcon(QMessageBox::Information) ;
     information->exec() ;
+}
+
+void MainWindow::avancer(){
+    MyRobot monRobot;
+    monRobot.Avancer();
 }

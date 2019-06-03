@@ -34,6 +34,7 @@ class MainWindow : public QMainWindow {
 
     public slots:
         void disconnect() ;
+        void avancer();
 };
 
 #endif // MAINWINDOW_H

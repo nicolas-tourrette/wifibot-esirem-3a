@@ -75,27 +75,26 @@ void MyRobot::MyTimerSlot() {
 }
 
 void MyRobot::Avancer(){
-
-    qDebug() << "The robot is moving ?!";
-    DataToSend[0] = 0xFF;
-    DataToSend[1] = 0x07;
+    qDebug() << "au secours";
     DataToSend[2] = 0x78;
-    DataToSend[3] = 0x0;
     DataToSend[4] = 0x78;
-    DataToSend[5] = 0x0;
-    DataToSend[6] = 0x0;
-    DataToSend[7] = Crc16(&DataToSend,1);
-    DataToSend[8] = Crc16(&DataToSend,1) >> 8;
+    DataToSend[6] = 0x78;
+    short crc = Crc16(&DataToSend,6);
+    DataToSend[7] = char(crc);
+    DataToSend[8] = char(crc >> 8);
+    qDebug() << crc;
 }
 
-unsigned short MyRobot::Crc16(QByteArray *byteArray, int pos){
-    unsigned char *data = (unsigned char*)byteArray->constData();
-    unsigned short crc = 0xFFFF;
-    unsigned short Polynome = 0xA001;
-    unsigned short Parity = 0;
-    for(; pos < byteArray->length(); pos++){
-        crc ^= *(data+pos);
-        for (unsigned int CptBit = 0; CptBit <= 7 ; CptBit++){
+short MyRobot::Crc16(QByteArray *tab_addresses, unsigned char octet_max){
+    const unsigned char *data = ((unsigned char*)tab_addresses->constData())+1;
+    unsigned int crc = 0xFFFF;
+    unsigned int Polynome = 0xA001;
+    unsigned int Parity = 0;
+    crc = 0xFFFF;
+    Polynome = 0xA001;
+    for(int compte_octet = 0; compte_octet < octet_max ;compte_octet++){
+        crc ^= *(data+octet_max);
+        for (int compte_bit = 0; compte_bit <= 7 ; compte_bit++){
             Parity= crc;
             crc >>= 1;
             if (Parity%2 == true) crc ^= Polynome;
