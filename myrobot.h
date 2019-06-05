@@ -28,7 +28,11 @@ public slots:
     void readyRead();
     void MyTimerSlot();
     void Avancer();
-    short Crc16(QByteArray *tab_addresses, unsigned char octet_max);
+    void Arreter();
+    void Reculer();
+    void Gauche();
+    void Droite();
+    qint16 Crc16(QByteArray *Adresse_tab , unsigned char Taille_max);
 
 private:
     QTcpSocket *socket;

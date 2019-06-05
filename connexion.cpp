@@ -64,17 +64,15 @@ void Connexion::okButtonClic(){
         information->setText("Trying to reach " + ipAddress + ":" + numPortField->text() + "... Please wait.") ;
         information->setIcon(QMessageBox::Information) ;
         information->exec() ;
-        if(monRobot.doConnect(ipAddress, numPortField->text())){      //To use in test mode, comment this line.
+        bool test = monRobot.doConnect(ipAddress, numPortField->text());
+        if(test){      //To use in test mode, comment this line.
         //if(true){                                                       //To use in real mode, comment this line.
             information->setText("Connexion established with " + ipAddress + ":" + numPortField->text() + "!") ;
             information->setIcon(QMessageBox::Information) ;
             information->exec() ;
-            MainWindow *fenetrePrincipale = new MainWindow(ipAddress, numPort);
+            MainWindow *fenetrePrincipale = new MainWindow(ipAddress, numPort, test);
             fenetrePrincipale->show() ;
             this->close() ;
-        }
-        else{
-
         }
     }
 }

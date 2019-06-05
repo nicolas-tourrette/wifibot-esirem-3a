@@ -74,31 +74,72 @@ void MyRobot::MyTimerSlot() {
     Mutex.unlock();
 }
 
-void MyRobot::Avancer(){
-    qDebug() << "au secours";
-    DataToSend[2] = 0x78;
-    DataToSend[4] = 0x78;
-    DataToSend[6] = 0x78;
-    short crc = Crc16(&DataToSend,6);
-    DataToSend[7] = char(crc);
-    DataToSend[8] = char(crc >> 8);
-    qDebug() << crc;
+qint16 MyRobot::Crc16(QByteArray *Adresse_tab , unsigned char Taille_max){
+const unsigned char *data = ((const unsigned char*)Adresse_tab->constData())+1;
+unsigned int Crc = 0xFFFF;
+unsigned int Polynome = 0xA001;
+unsigned int CptOctet = 0;
+unsigned int CptBit = 0;
+unsigned int Parity= 0;
+Crc=0xFFFF;
+Polynome= 0xA001;
+for ( CptOctet= 0 ; CptOctet < Taille_max ; CptOctet++)
+{
+    Crc ^= *( data + CptOctet);
+    for ( CptBit = 0; CptBit <= 7 ; CptBit++)
+    {
+    Parity= Crc;
+    Crc >>= 1;
+    if (Parity%2 == true) Crc ^= Polynome;
+    }
+}
+return(Crc);
 }
 
-short MyRobot::Crc16(QByteArray *tab_addresses, unsigned char octet_max){
-    const unsigned char *data = ((unsigned char*)tab_addresses->constData())+1;
-    unsigned int crc = 0xFFFF;
-    unsigned int Polynome = 0xA001;
-    unsigned int Parity = 0;
-    crc = 0xFFFF;
-    Polynome = 0xA001;
-    for(int compte_octet = 0; compte_octet < octet_max ;compte_octet++){
-        crc ^= *(data+octet_max);
-        for (int compte_bit = 0; compte_bit <= 7 ; compte_bit++){
-            Parity= crc;
-            crc >>= 1;
-            if (Parity%2 == true) crc ^= Polynome;
-        }
-    }
-    return crc;
+
+void MyRobot::Avancer(){
+    DataToSend[2] = 120;
+    DataToSend[4] = 120;
+    DataToSend[6] = 0x50;
+    qint16 crc=Crc16(&DataToSend, 6);
+    DataToSend[7] =char(crc);
+    DataToSend[8] =char(crc>> 8);
+}
+
+void MyRobot::Arreter(){
+    DataToSend[2] = 0;
+    DataToSend[3] = 0;
+    DataToSend[4] = 0;
+    DataToSend[5] = 0;
+    DataToSend[6] = 0;
+    DataToSend[7] = 0;
+    DataToSend[8] = 0;
+}
+
+void MyRobot::Reculer(){
+    DataToSend[2] = 180;
+    DataToSend[4] = 180;
+    DataToSend[6] = 0;
+    qint16 crc=Crc16(&DataToSend, 6);
+    DataToSend[7] =char(crc);
+    DataToSend[8] =char(crc>> 8);
+}
+
+void MyRobot::Gauche(){
+    DataToSend[2] = 90;
+    DataToSend[4] = 180;
+    DataToSend[6] = 0x50;
+    qint16 crc=Crc16(&DataToSend, 6);
+    DataToSend[7] =char(crc);
+    DataToSend[8] =char(crc>> 8);
+}
+
+
+void MyRobot::Droite(){
+    DataToSend[2] = 180;
+    DataToSend[4] = 90;
+    DataToSend[6] = 0x50;
+    qint16 crc=Crc16(&DataToSend, 6);
+    DataToSend[7] =char(crc);
+    DataToSend[8] =char(crc>> 8);
 }
