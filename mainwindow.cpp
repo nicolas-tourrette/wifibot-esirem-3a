@@ -78,15 +78,19 @@ MainWindow::MainWindow(QString ip, int port, bool laConnexion) : QMainWindow() {
         rightButton->setToolTip("Go right!") ;
         innerPilotPanelGrid->addWidget(rightButton, 1, 1) ;
 
-        speed = new QLCDNumber() ;
+        monRobot->speed = new QLCDNumber() ;
         speedLabel = new QLabel("Speed: ", this) ;
         innerSensorsPanelGrid->addWidget(speedLabel, 0, 0) ;
-        innerSensorsPanelGrid->addWidget(speed, 0, 1) ;
+        innerSensorsPanelGrid->addWidget(monRobot->speed, 0, 1, 1, 2) ;
 
-        battery = new QLCDNumber() ;
         batteryLabel = new QLabel("Battery: ", this) ;
         innerSensorsPanelGrid->addWidget(batteryLabel, 1, 0) ;
-        innerSensorsPanelGrid->addWidget(battery, 1, 1) ;
+        innerSensorsPanelGrid->addWidget(monRobot->battery, 1, 1, 1, 2) ;
+
+        odometryLabel = new QLabel("Odometry: ", this) ;
+        innerSensorsPanelGrid->addWidget(odometryLabel, 2, 0) ;
+        innerSensorsPanelGrid->addWidget(monRobot->odometryL, 2, 1) ;
+        innerSensorsPanelGrid->addWidget(monRobot->odometryR, 2, 2) ;
 
         centralWidget->setLayout(grille) ;
         this->layout()->setSizeConstraint(QLayout::SetFixedSize) ;
@@ -122,7 +126,7 @@ void MainWindow::disconnect(){
     int action = information->exec() ;
     switch (action) {
         case QMessageBox::Yes :
-            //monRobot.disConnect();
+            monRobot->disConnect();
             this->close() ;
             break ;
         case QMessageBox::No :
@@ -162,4 +166,21 @@ void MainWindow::gauche(){
 
 void MainWindow::droite(){
     monRobot->Droite();
+}
+
+void MainWindow::keyPressEvent(QKeyEvent *event){
+    switch (event->key()) {
+        case Qt::Key_Z :
+            avancer() ;
+            break ;
+        case Qt::Key_S :
+            reculer() ;
+            break ;
+        case Qt::Key_Q :
+            gauche() ;
+            break ;
+        case Qt::Key_D :
+            droite() ;
+            break ;
+    }
 }

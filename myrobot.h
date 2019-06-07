@@ -8,6 +8,7 @@
 #include <QDebug>
 #include <QTimer>
 #include <QMutex>
+#include <QLCDNumber>
 
 class MyRobot : public QObject {
     Q_OBJECT
@@ -18,6 +19,10 @@ public:
     QByteArray DataToSend;
     QByteArray DataReceived;
     QMutex Mutex;
+    QLCDNumber *speed = new QLCDNumber() ;
+    QLCDNumber *battery  = new QLCDNumber() ;
+    QLCDNumber *odometryL  = new QLCDNumber() ;
+    QLCDNumber *odometryR  = new QLCDNumber() ;
 
 signals:
     void updateUI(const QByteArray Data);

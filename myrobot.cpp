@@ -61,10 +61,20 @@ void MyRobot::bytesWritten(qint64 bytes) {
 }
 
 void MyRobot::readyRead() {
-    qDebug() << "reading..."; // read the data from the socket
     DataReceived = socket->readAll();
-    emit updateUI(DataReceived);
-    qDebug() << DataReceived[0] << DataReceived[1] << DataReceived[2];
+    qDebug() << "reading..."; // read the data from the socket
+
+    unsigned char batteryValue = DataReceived[2];
+    battery->display(batteryValue);
+
+    unsigned char speedRate = (int)((DataReceived[1] << 8) + DataReceived[0]) ;
+    speed->display(speedRate) ;
+
+    unsigned char odemetryRateL = (((long)DataReceived[8] << 24))+(((long)DataReceived[7] << 16))+(((long)DataReceived[6] << 8))+((long)DataReceived[5]) ;
+    odometryL->display(odemetryRateL) ;
+
+    unsigned char odemetryRateR = (((long)DataReceived[16] << 24))+(((long)DataReceived[15] << 16))+(((long)DataReceived[14] << 8))+((long)DataReceived[13]);
+    odometryR->display(odemetryRateR) ;
 }
 
 void MyRobot::MyTimerSlot() {

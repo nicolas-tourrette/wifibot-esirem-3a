@@ -13,7 +13,7 @@
 #include <QMenu>
 #include <QAction>
 #include <QStatusBar>
-#include <QLCDNumber>
+#include <QKeyEvent>
 #include <QDebug>
 
 #include "myrobot.h"
@@ -23,16 +23,16 @@ class MainWindow : public QMainWindow {
 
     public:
         MainWindow(QString ip, int port, bool laConnexion) ;
+        void keyPressEvent(QKeyEvent *event) ;
 
     private:
         void showHelp() ;
         void showAbout() ;
         MyRobot *monRobot = new MyRobot();
         QString ipAddress, numPort ;
-        QLabel *statusLabel, *ipAddressLabel, *numPortLabel, *speedLabel, *batteryLabel ;
+        QLabel *statusLabel, *ipAddressLabel, *numPortLabel, *speedLabel, *batteryLabel, *odometryLabel ;
         QGroupBox *pilotBox, *sensorsBox, *cameraBox ;
         QPushButton *upButton, *downButton, *leftButton, *rightButton ;
-        QLCDNumber *speed, *battery ;
 
     public slots:
         void disconnect() ;
