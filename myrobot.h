@@ -9,7 +9,6 @@
 #include <QTimer>
 #include <QMutex>
 #include <QLCDNumber>
-#include <QWebEngineView>
 
 class MyRobot : public QObject {
     Q_OBJECT
@@ -24,7 +23,6 @@ public:
     QLCDNumber *battery  = new QLCDNumber() ;
     QLCDNumber *odometryL  = new QLCDNumber() ;
     QLCDNumber *odometryR  = new QLCDNumber() ;
-    QWebEngineView *page = new QWebEngineView();
 
 signals:
     void updateUI(const QByteArray Data);

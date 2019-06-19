@@ -15,6 +15,8 @@
 #include <QStatusBar>
 #include <QKeyEvent>
 #include <QDebug>
+#include <QtWebEngineWidgets/QWebEngineView>
+#include <QUrl>
 
 #include "myrobot.h"
 

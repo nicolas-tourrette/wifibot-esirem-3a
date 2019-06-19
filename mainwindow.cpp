@@ -1,8 +1,8 @@
 #include "mainwindow.h"
 
 MainWindow::MainWindow(QString ip, int port, bool laConnexion) : QMainWindow() {
-    if(monRobot->doConnect(ip, QString::number(port)) && laConnexion){      //To use in test mode, comment this line.
-    //if(laConnexion){                                                      //To use in real mode, comment this line.
+    //if(monRobot->doConnect(ip, QString::number(port)) && laConnexion){      //To use in test mode, comment this line.
+    if(laConnexion){                                                      //To use in real mode, comment this line.
         ipAddress = ip ;
         numPort = QString::number(port) ;
 
@@ -93,9 +93,12 @@ MainWindow::MainWindow(QString ip, int port, bool laConnexion) : QMainWindow() {
         innerSensorsPanelGrid->addWidget(monRobot->odometryL, 2, 1) ;
         innerSensorsPanelGrid->addWidget(monRobot->odometryR, 2, 2) ;
 
-        monRobot->page->setMinimumSize(400,300);
-        monRobot->page->load(QUrl(ipAddress));
-        innerCameraPanelGrid->addWidget(monRobot->page);
+        /*QWebEngineView *page = new QWebEngineView();
+        page->setMinimumSize(400,300);
+        //monRobot->page->load(QUrl("http://"+ipAddress+":8080/javascript_simple.html"));
+        page->load(QUrl("https://www.google.fr"));
+        page->show();
+        innerCameraPanelGrid->addWidget(page);*/
 
         centralWidget->setLayout(grille) ;
         this->layout()->setSizeConstraint(QLayout::SetFixedSize) ;

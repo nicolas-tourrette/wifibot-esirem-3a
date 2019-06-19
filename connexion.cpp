@@ -65,12 +65,12 @@ void Connexion::okButtonClic(){
         information->setIcon(QMessageBox::Information) ;
         information->exec() ;
         bool connection = monRobot.doConnect(ipAddress, numPortField->text());
-        if(connection){                                                   //To use in test mode, comment this line.
-        //if(true){                                                       //To use in real mode, comment this line.
+        //if(connection){                                                   //To use in test mode, comment this line.
+        if(true){                                                       //To use in real mode, comment this line.
             information->setText("Connexion established with " + ipAddress + ":" + numPortField->text() + "!") ;
             information->setIcon(QMessageBox::Information) ;
             information->exec() ;
-            MainWindow *fenetrePrincipale = new MainWindow(ipAddress, numPort, connection);           //To test mode works, put 'true' instead of 'connection'
+            MainWindow *fenetrePrincipale = new MainWindow(ipAddress, numPort, true);           //To test mode works, put 'true' instead of 'connection'
             fenetrePrincipale->show() ;
             this->close() ;
         }
