@@ -24,6 +24,7 @@ class MainWindow : public QMainWindow {
     public:
         MainWindow(QString ip, int port, bool laConnexion) ;
         void keyPressEvent(QKeyEvent *event) ;
+        void keyReleaseEvent(QKeyEvent *event) ;
 
     private:
         void showHelp() ;

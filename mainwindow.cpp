@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 
 MainWindow::MainWindow(QString ip, int port, bool laConnexion) : QMainWindow() {
-    if(monRobot->doConnect(ip, QString::number(port))){
+    if(monRobot->doConnect(ip, QString::number(port)) && laConnexion){
         ipAddress = ip ;
         numPort = QString::number(port) ;
 
@@ -181,6 +181,23 @@ void MainWindow::keyPressEvent(QKeyEvent *event){
             break ;
         case Qt::Key_D :
             droite() ;
+            break ;
+    }
+}
+
+void MainWindow::keyReleaseEvent(QKeyEvent *event){
+    switch (event->key()) {
+        case Qt::Key_Z :
+            arreter() ;
+            break ;
+        case Qt::Key_S :
+            arreter() ;
+            break ;
+        case Qt::Key_Q :
+            arreter() ;
+            break ;
+        case Qt::Key_D :
+            arreter() ;
             break ;
     }
 }
