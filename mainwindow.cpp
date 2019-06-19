@@ -1,7 +1,8 @@
 #include "mainwindow.h"
 
 MainWindow::MainWindow(QString ip, int port, bool laConnexion) : QMainWindow() {
-    if(monRobot->doConnect(ip, QString::number(port)) && laConnexion){
+    if(monRobot->doConnect(ip, QString::number(port)) && laConnexion){      //To use in test mode, comment this line.
+    //if(laConnexion){                                                      //To use in real mode, comment this line.
         ipAddress = ip ;
         numPort = QString::number(port) ;
 
@@ -136,7 +137,12 @@ void MainWindow::disconnect(){
 }
 
 void MainWindow::showHelp(){
-
+    QMessageBox *information = new QMessageBox();
+    information->setWindowTitle("Wifibot Pilot | Help") ;
+    information->setText(tr("<h2>Wifibot Pilot Help</h2>")) ;
+    information->setInformativeText(tr("<p>This interface has been developped to implement some classical features of a Wifibot robot, that is to say move ahead, backward, to the left and to the right. To move the robot, press either the buttons displayed on the left screen side or the keyboard touches Z, Q, S or D. The robot will move on your demand.</p><p>On the right side, you have the sensors information of the robot: speed rate, the battery level and the odometry sensor.</p><p>At the bottom of the screen, you have the video stream (if implemented).</p>")) ;
+    information->setIcon(QMessageBox::Information) ;
+    information->exec() ;
 }
 
 void MainWindow::showAbout(){
