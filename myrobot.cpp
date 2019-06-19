@@ -68,7 +68,14 @@ void MyRobot::readyRead() {
     battery->display(batteryValue);
 
     unsigned char speedRate = (int)((DataReceived[1] << 8) + DataReceived[0]) ;
-    speed->display(speedRate) ;
+    //speed->display(speedRate) ;
+
+    double mphspeed=double(speedRate)/2048;
+    qDebug()<<"pm "<<mphspeed;
+    double perimeter= 2*3.1415*0.07;
+    mphspeed=mphspeed*perimeter*200;
+    qDebug()<<"speed "<<mphspeed<<" m/s";
+    speed->display(mphspeed) ;
 
     unsigned char odemetryRateL = (((long)DataReceived[8] << 24))+(((long)DataReceived[7] << 16))+(((long)DataReceived[6] << 8))+((long)DataReceived[5]) ;
     odometryL->display(odemetryRateL) ;
@@ -85,27 +92,25 @@ void MyRobot::MyTimerSlot() {
 }
 
 qint16 MyRobot::Crc16(QByteArray *Adresse_tab , unsigned char Taille_max){
-const unsigned char *data = ((const unsigned char*)Adresse_tab->constData())+1;
-unsigned int Crc = 0xFFFF;
-unsigned int Polynome = 0xA001;
-unsigned int CptOctet = 0;
-unsigned int CptBit = 0;
-unsigned int Parity= 0;
-Crc=0xFFFF;
-Polynome= 0xA001;
-for ( CptOctet= 0 ; CptOctet < Taille_max ; CptOctet++)
-{
-    Crc ^= *( data + CptOctet);
-    for ( CptBit = 0; CptBit <= 7 ; CptBit++)
-    {
-    Parity= Crc;
-    Crc >>= 1;
-    if (Parity%2 == true) Crc ^= Polynome;
+    const unsigned char *data = ((const unsigned char*)Adresse_tab->constData())+1;
+    unsigned int Crc = 0xFFFF;
+    unsigned int Polynome = 0xA001;
+    unsigned int CptOctet = 0;
+    unsigned int CptBit = 0;
+    unsigned int Parity= 0;
+    Crc=0xFFFF;
+    Polynome= 0xA001;
+    for ( CptOctet= 0 ; CptOctet < Taille_max ; CptOctet++){
+        Crc ^= *( data + CptOctet);
+        for ( CptBit = 0; CptBit <= 7 ; CptBit++){
+            Parity= Crc;
+            Crc >>= 1;
+            if (Parity%2 == true)
+                Crc ^= Polynome;
+        }
     }
+    return(Crc);
 }
-return(Crc);
-}
-
 
 void MyRobot::Avancer(){
     DataToSend[2] = 120;
@@ -152,4 +157,75 @@ void MyRobot::Droite(){
     qint16 crc=Crc16(&DataToSend, 6);
     DataToSend[7] =char(crc);
     DataToSend[8] =char(crc>> 8);
+}
+
+void MyRobot::avancer_progressive() {
+    qDebug() << "Avance";
+    DataToSend[2] = vitesse;
+    DataToSend[4] = vitesse;
+    DataToSend[6] = 0xF8;
+    qint16 crc=Crc16(&DataToSend, 6);
+    DataToSend[7] =char(crc);
+    DataToSend[8] =char(crc>> 8);
+    robotAvance = true;
+    robotRecule = false;
+    robotGauche = false;
+    robotDroite = false;
+}
+
+void MyRobot::reculer_progressive() {
+    qDebug() << "Recule";
+    DataToSend[2] = vitesse;
+    DataToSend[4] = vitesse;
+    DataToSend[6] = 0xA0;
+    qint16 crc=Crc16(&DataToSend, 6);
+    DataToSend[7] =char(crc);
+    DataToSend[8] =char(crc>> 8);
+    robotAvance = true;
+    robotRecule = false;
+    robotGauche = false;
+    robotDroite = false;
+}
+
+void MyRobot::gauche_progressive() {
+    qDebug() << "Gauche";
+    DataToSend[2] = vitesse;
+    DataToSend[4] = vitesse;
+    DataToSend[6] = 0xB0;
+    qint16 crc=Crc16(&DataToSend, 6);
+    DataToSend[7] =char(crc);
+    DataToSend[8] =char(crc>> 8);
+    robotAvance = false;
+    robotRecule = false;
+    robotGauche = true;
+    robotDroite = false;
+}
+
+void MyRobot::droite_progressive() {
+    qDebug() << "Droite";
+    DataToSend[2] = vitesse;
+    DataToSend[4] = vitesse;
+    DataToSend[6] = 0xE0;
+    qint16 crc=Crc16(&DataToSend, 6);
+    DataToSend[7] =char(crc);
+    DataToSend[8] =char(crc>> 8);
+    robotAvance = false;
+    robotRecule = false;
+    robotGauche = false;
+    robotDroite = true;
+}
+
+void MyRobot::setVitesse(int value){
+    vitesse = value;
+    if(robotAvance)
+        avancer();
+
+    if(robotRecule)
+        reculer();
+
+    if(robotGauche)
+        gauche();
+
+    if(robotDroite)
+        droite();
 }

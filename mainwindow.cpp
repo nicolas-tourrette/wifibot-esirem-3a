@@ -93,6 +93,10 @@ MainWindow::MainWindow(QString ip, int port, bool laConnexion) : QMainWindow() {
         innerSensorsPanelGrid->addWidget(monRobot->odometryL, 2, 1) ;
         innerSensorsPanelGrid->addWidget(monRobot->odometryR, 2, 2) ;
 
+        monRobot->page->setMinimumSize(400,300);
+        monRobot->page->load(QUrl(ipAddress));
+        innerCameraPanelGrid->addWidget(monRobot->page);
+
         centralWidget->setLayout(grille) ;
         this->layout()->setSizeConstraint(QLayout::SetFixedSize) ;
         pilotBox->setLayout(innerPilotPanelGrid) ;
