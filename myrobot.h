@@ -23,6 +23,10 @@ public:
     QLCDNumber *battery  = new QLCDNumber() ;
     QLCDNumber *odometryL  = new QLCDNumber() ;
     QLCDNumber *odometryR  = new QLCDNumber() ;
+    QLCDNumber *infraRedFL  = new QLCDNumber() ;
+    QLCDNumber *infraRedFR  = new QLCDNumber() ;
+    QLCDNumber *infraRedBL  = new QLCDNumber() ;
+    QLCDNumber *infraRedBR  = new QLCDNumber() ;
 
 signals:
     void updateUI(const QByteArray Data);

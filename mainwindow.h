@@ -17,6 +17,8 @@
 #include <QDebug>
 #include <QtWebEngineWidgets/QWebEngineView>
 #include <QUrl>
+#include <QSlider>
+#include <QDebug>
 
 #include "myrobot.h"
 
@@ -33,9 +35,11 @@ class MainWindow : public QMainWindow {
         void showAbout() ;
         MyRobot *monRobot = new MyRobot();
         QString ipAddress, numPort ;
-        QLabel *statusLabel, *ipAddressLabel, *numPortLabel, *speedLabel, *batteryLabel, *odometryLabel ;
+        QLabel *statusLabel, *ipAddressLabel, *numPortLabel, *speedLabel, *batteryLabel, *odometryLabel, *infraRedLabel ;
         QGroupBox *pilotBox, *sensorsBox, *cameraBox ;
         QPushButton *upButton, *downButton, *leftButton, *rightButton ;
+        QWebEngineView *page ;
+        //QSlider *speedBar ;
 
     public slots:
         void disconnect() ;
@@ -44,6 +48,7 @@ class MainWindow : public QMainWindow {
         void reculer() ;
         void gauche() ;
         void droite() ;
+        //void speedChange(QSlider slider) ;
 };
 
 #endif // MAINWINDOW_H

@@ -1,8 +1,8 @@
 #include "mainwindow.h"
 
 MainWindow::MainWindow(QString ip, int port, bool laConnexion) : QMainWindow() {
-    //if(monRobot->doConnect(ip, QString::number(port)) && laConnexion){      //To use in test mode, comment this line.
-    if(laConnexion){                                                      //To use in real mode, comment this line.
+    if(monRobot->doConnect(ip, QString::number(port)) && laConnexion){      //To use in test mode, comment this line.
+    //if(laConnexion){                                                      //To use in real mode, comment this line.
         ipAddress = ip ;
         numPort = QString::number(port) ;
 
@@ -79,6 +79,12 @@ MainWindow::MainWindow(QString ip, int port, bool laConnexion) : QMainWindow() {
         rightButton->setToolTip("Go right!") ;
         innerPilotPanelGrid->addWidget(rightButton, 1, 1) ;
 
+        /*speedBar = new QSlider() ;
+        speedBar->setOrientation(Qt::Horizontal) ;
+        speedBar->setToolTip("Progressive speed") ;
+        speedBar->setMaximum(240) ;
+        innerPilotPanelGrid->addWidget(speedBar, 3, 0, 1, 2) ;*/
+
         monRobot->speed = new QLCDNumber() ;
         speedLabel = new QLabel("Speed: ", this) ;
         innerSensorsPanelGrid->addWidget(speedLabel, 0, 0) ;
@@ -93,12 +99,18 @@ MainWindow::MainWindow(QString ip, int port, bool laConnexion) : QMainWindow() {
         innerSensorsPanelGrid->addWidget(monRobot->odometryL, 2, 1) ;
         innerSensorsPanelGrid->addWidget(monRobot->odometryR, 2, 2) ;
 
-        /*QWebEngineView *page = new QWebEngineView();
-        page->setMinimumSize(400,300);
-        //monRobot->page->load(QUrl("http://"+ipAddress+":8080/javascript_simple.html"));
-        page->load(QUrl("https://www.google.fr"));
-        page->show();
-        innerCameraPanelGrid->addWidget(page);*/
+        infraRedLabel = new QLabel("IR sensors:", this) ;
+        innerSensorsPanelGrid->addWidget(infraRedLabel, 3, 0, 2, 1) ;
+        innerSensorsPanelGrid->addWidget(monRobot->infraRedFL, 3, 1) ;
+        innerSensorsPanelGrid->addWidget(monRobot->infraRedFR, 3, 2) ;
+        innerSensorsPanelGrid->addWidget(monRobot->infraRedBL, 4, 1) ;
+        innerSensorsPanelGrid->addWidget(monRobot->infraRedBR, 4, 2) ;
+
+        page = new QWebEngineView(this) ;
+        page->setMinimumSize(330,250) ;
+        page->load(QUrl("http://"+ipAddress+":8080/javascript_simple.html")) ;
+        page->show() ;
+        innerCameraPanelGrid->addWidget(page) ;
 
         centralWidget->setLayout(grille) ;
         this->layout()->setSizeConstraint(QLayout::SetFixedSize) ;
@@ -119,6 +131,8 @@ MainWindow::MainWindow(QString ip, int port, bool laConnexion) : QMainWindow() {
 
         QObject::connect(rightButton, SIGNAL(pressed()), this, SLOT(droite())) ;
         QObject::connect(rightButton, SIGNAL(released()), this, SLOT(arreter())) ;
+
+        //QObject::connect(speedBar, SIGNAL(sliderReleased()), this, SLOT(speedChange(speedBar))) ;
     }
 }
 
@@ -134,7 +148,8 @@ void MainWindow::disconnect(){
     int action = information->exec() ;
     switch (action) {
         case QMessageBox::Yes :
-            monRobot->disConnect();
+            page->close() ;
+            monRobot->disConnect() ;
             this->close() ;
             break ;
         case QMessageBox::No :
@@ -163,6 +178,7 @@ void MainWindow::showAbout(){
 
 void MainWindow::avancer(){
     monRobot->Avancer();
+    //monRobot->avancer_progressive();
 }
 
 void MainWindow::arreter(){
@@ -214,3 +230,8 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event){
             break ;
     }
 }
+
+/*void MainWindow::speedChange(QSlider slider){
+    qDebug() << slider.value();
+    monRobot->setVitesse(slider.value()) ;
+}*/

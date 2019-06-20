@@ -2,6 +2,12 @@
 
 #include "myrobot.h"
 
+int vitesse = 0;
+bool robotAvance = false;
+bool robotRecule = false;
+bool robotGauche = false;
+bool robotDroite = false;
+
 MyRobot::MyRobot(QObject *parent) : QObject(parent) {
     DataToSend.resize(9);
     DataToSend[0] = 0xFF;
@@ -82,6 +88,18 @@ void MyRobot::readyRead() {
 
     unsigned char odemetryRateR = (((long)DataReceived[16] << 24))+(((long)DataReceived[15] << 16))+(((long)DataReceived[14] << 8))+((long)DataReceived[13]);
     odometryR->display(odemetryRateR) ;
+
+    unsigned char infraRedFLValue = DataReceived[3] ;
+    infraRedFL->display(infraRedFLValue);
+
+    unsigned char infraRedFRValue = DataReceived[11] ;
+    infraRedFR->display(infraRedFRValue);
+
+    unsigned char infraRedBLValue = DataReceived[4] ;
+    infraRedBL->display(infraRedBLValue);
+
+    unsigned char infraRedBRValue = DataReceived[12] ;
+    infraRedBR->display(infraRedBRValue);
 }
 
 void MyRobot::MyTimerSlot() {
@@ -167,10 +185,10 @@ void MyRobot::avancer_progressive() {
     qint16 crc=Crc16(&DataToSend, 6);
     DataToSend[7] =char(crc);
     DataToSend[8] =char(crc>> 8);
-    /*robotAvance = true;
+    robotAvance = true;
     robotRecule = false;
     robotGauche = false;
-    robotDroite = false;*/
+    robotDroite = false;
 }
 
 void MyRobot::reculer_progressive() {
@@ -181,10 +199,10 @@ void MyRobot::reculer_progressive() {
     qint16 crc=Crc16(&DataToSend, 6);
     DataToSend[7] =char(crc);
     DataToSend[8] =char(crc>> 8);
-    /*robotAvance = true;
+    robotAvance = true;
     robotRecule = false;
     robotGauche = false;
-    robotDroite = false;*/
+    robotDroite = false;
 }
 
 void MyRobot::gauche_progressive() {
@@ -195,10 +213,10 @@ void MyRobot::gauche_progressive() {
     qint16 crc=Crc16(&DataToSend, 6);
     DataToSend[7] =char(crc);
     DataToSend[8] =char(crc>> 8);
-    /*robotAvance = false;
+    robotAvance = false;
     robotRecule = false;
     robotGauche = true;
-    robotDroite = false;*/
+    robotDroite = false;
 }
 
 void MyRobot::droite_progressive() {
@@ -209,23 +227,23 @@ void MyRobot::droite_progressive() {
     qint16 crc=Crc16(&DataToSend, 6);
     DataToSend[7] =char(crc);
     DataToSend[8] =char(crc>> 8);
-    /*robotAvance = false;
+    robotAvance = false;
     robotRecule = false;
     robotGauche = false;
-    robotDroite = true;*/
+    robotDroite = true;
 }
 
 void MyRobot::setVitesse(int value){
-   /* vitesse = value;
+    vitesse = value;
     if(robotAvance)
-        avancer();
+        avancer_progressive();
 
     if(robotRecule)
-        reculer();
+        reculer_progressive();
 
     if(robotGauche)
-        gauche();
+        gauche_progressive();
 
     if(robotDroite)
-        droite();*/
+        droite_progressive();
 }
